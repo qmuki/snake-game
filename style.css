@@ -1,0 +1,62 @@
+body {
+    background-color: rgba(230, 230, 230, 0.651);
+
+    text-align: center;
+
+    margin: 0;
+}
+
+input, button { padding: 3px 6px; }
+
+input { width: 25px; }
+
+button {
+    margin-bottom: 20px;
+}
+
+.retro {
+    font-family: 'VT323', monospace;
+}
+
+.title {
+    font-size: 60px;
+    letter-spacing: 5px;
+    color: rgba(14, 14, 14, 0.97);
+    text-shadow:  2px 0px rgb(0, 140, 255), -2px 0px deeppink;
+
+    margin-bottom: 10px;
+}
+
+.line {
+    border-bottom:1px dotted #999;
+    padding-bottom:20px;
+
+    margin-top: 0px;
+    margin-bottom: 40px;
+}
+
+#grid {
+    margin: 40px auto;
+
+    background-color: #999;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+#grid div {
+    background-color: rgb(180, 110, 30);
+
+    height: 10px;
+    width: 10px;
+}
+
+#grid .snake {
+    background-color: rgb(30, 180, 38);
+}
+
+#grid .apple {
+    background-color: rgb(241, 27, 20);
+}
