@@ -2,37 +2,40 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <title>Page Title</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
-    <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
-    <script src="js/minifraemwork.js"></script>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body>
+<body onload="startGame()" onkeydown="keyDown()">
 
-    <!-- Title -->
-    <h1 class="title retro">snake</h1>
-    <div class="line"></div>
-
-    <div id="settings">
-        <!-- Settings -->
-        <input id="input-1" class="retro" value="400">
-        <b class="retro">x</b>
-        <input id="input-2" class="retro" value="400">
-
-        <button id="button" class="retro" onclick="render()">play</button>
-    </div>
-
-    <!-- Game -->
-    <div id="grid">
-        
-    </div>
+    <!-- settings -->
+    <!-- in pixels -->
+    <input id="input-cell-size" value="40" hidden>
+    <input id="input-width" value="800" hidden>
+    <input id="input-height" value="600" hidden>
+    <input id="time-speed" value="100" hidden>
 
 
 
-    <!-- Js Scripts -->
-    <script src="js/main.js"></script>
+    <!-- game -->
+    <canvas id="canvas">Your browser doesn't support canvas.</canvas>
+    
+
+
+    <!-- virtual keys -->
+    <br>
+    <button id="up" onmousedown="virtualKeyDown('up')" hidden>up</button>
+    <button id="down" onmousedown="virtualKeyDown('down')" hidden>down</button>
+    <button id="left" onmousedown="virtualKeyDown('left')" hidden>left</button>
+    <button id="right" onmousedown="virtualKeyDown('right')" hidden>right</button>
+    <button id="pause" onmousedown="virtualKeyDown('pause')" hidden>pause</button>
+    <button id="restart" onmousedown="virtualKeyDown('restart')" hidden>restart</button>
+
+
+
+
+    <!-- javascript -->
+    <script src="main.js"></script>
 </body>
 
 </html>
