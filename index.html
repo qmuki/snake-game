@@ -15,7 +15,11 @@
     <input id="input-height" value="600" hidden>
     <input id="time-speed" value="100" hidden>
 
-
+    <!-- modes -->
+    modes:
+    <button id="portal-mode" value="off" type="checkbox" onclick="changePortalMode()">turn on portal</button>
+    <button id="aim-mode" value="off" type="checkbox" onclick="changeAimMode()">turn on aim</button>
+    <button id="snake-in-self-mode" value="off" type="checkbox" onclick="changeSnakeInSelfMode()">turn on snake in self</button>
 
     <!-- game -->
     <canvas id="canvas">Your browser doesn't support canvas.</canvas>
@@ -30,8 +34,8 @@
     <button id="right" onmousedown="virtualKeyDown('right')" hidden>right</button>
     <button id="pause" onmousedown="virtualKeyDown('pause')" hidden>pause</button>
     <button id="restart" onmousedown="virtualKeyDown('restart')" hidden>restart</button>
-
-
+    <button id="speed-increase" onmousedown="virtualKeyDown('speed-increase')" >+</button>
+    <button id="speed-decrease" onmousedown="virtualKeyDown('speed-decrease')" >-</button>
 
 
     <!-- javascript -->
