@@ -1,22 +1,31 @@
 'use strict';
 
-/* Settings */
-const cellSize = parseInt(document.getElementById('input-cell-size').value)
+// Settings
+var game = {}
+let cellSize = parseInt(document.getElementById('input-cell-size').value)
 let timeSpeed = parseInt(document.getElementById('time-speed').value)
 
+// canvas
 const gameWindowWidth = (Math.floor(document.getElementById('input-width').value / cellSize)) * cellSize
 const gameWindowHeight = (Math.floor(document.getElementById('input-height').value / cellSize)) * cellSize
 
-/* Modes */
-// walls portal
-let isPortalMode = document.getElementById('portal-mode').value === 'on' ? true : false
-// snake aim
-let isAimMode = document.getElementById('aim-mode').value === 'on' ? true : false
-// snake eat self
-let isSnakeInSelfMode = document.getElementById('snake-in-self-mode').value === 'on' ? true : false
+const canvas = document.getElementById('canvas')
+const ctx = canvas.getContext('2d')
 
-/* Colors */
-let color_canvasBody = '#e0e9eb'
+// modes
+let isPortalMode = true // walls portal
+let isAimMode = true // snake aim
+let isSnakeInSelfMode = true // snake eat self
+let isMovingBackwardMode = true // snake moving backward
+
+// game's logic
+let isGameOver = false
+let isFruitTaken = false
+let isIncrease = false
+
+// colors
+let Colors = {}
+let color_canvasBody = '#f0f0f0'
 let color_snake = generateColor(255, 190, 220)
 let color_snakeHead = generateColor(210, 180, 180)
 let color_snakeDead = 'red'
@@ -31,19 +40,14 @@ function generateColor(r = 255, g = 255, b = 255) {
 /* snake direction */
 let moveDirection = 'pause' // w - up, s - down, a - left, d - right
 
-/* canvas */
-const canvas = document.getElementById('canvas')
-const ctx = canvas.getContext('2d')
-
 /* coordinates arrays declaration */
 let snake = generateSnake()
 let fruit = []
-let snakeTail = [] // save at the render() beginning, push it when eating fruit
 
-/* logic's variables */
-let isGameOver = false
-let isFruitTaken = false
-let isIncrease = false
+/* updating in colission */
+let snakeHead = []
+let snakeTail = []
+
 
 
 
@@ -74,24 +78,22 @@ function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     drawingCanvasBody()
 
-    /* save tail */
-    snakeTail = snake[0]
-
     /* Check keyboard and move snake */
-    snakeMoving()
+    move()
 
+
+
+    /* Physics collisions with walls, snake in self, fruit */
+    colission()
 
 
 
     /* generate fruit */
-    // fruit can generate in snake
+    // FIXME: fruit can generate in snake
     generateFruit()
 
     /* drawing fruit */
     drawingFruit()
-
-    /* Physics collisions with walls, snake in self, fruit */
-    colission()
 
     /* drawing snake */
     drawingSnake()
@@ -112,13 +114,11 @@ function render() {
 
 
 /* Drawing */
-// canvas body
 function drawingCanvasBody() {
     ctx.fillStyle = color_canvasBody
     ctx.fillRect(0, 0, gameWindowWidth, gameWindowHeight)
 }
 
-// snake
 function drawingSnake() {
     ctx.fillStyle = color_snake
     for (let i = 0; i < snake.length; i++) {
@@ -128,14 +128,17 @@ function drawingSnake() {
     ctx.fillRect(snake[0][0], snake[0][1], cellSize, cellSize)
 }
 
-// fruit
 function drawingFruit() {
     ctx.fillStyle = color_fruit
     ctx.fillRect(fruit[0], fruit[1], cellSize, cellSize)
 }
 
+function drawingOneCell(cellCoordinates) {
+    ctx.fillStyle = 'blue'
+    ctx.fillRect(cellCoordinates[0], cellCoordinates[1], cellSize, cellSize)
+}
+
 /* Generating */
-// snake
 function generateSnake() {
     return [
         [Math.floor(Math.random() * gameWindowWidth / cellSize) * cellSize,
@@ -144,7 +147,6 @@ function generateSnake() {
     ]
 }
 
-// fruit
 function generateFruit() {
     if (isFruitTaken === false) {
         fruit = [Math.floor(Math.random() * gameWindowWidth / cellSize) * cellSize,
@@ -156,40 +158,50 @@ function generateFruit() {
 }
 
 /* Moving snake */
-function snakeMoving() {
+function move() {
     const temp_snake = snake.slice()
 
-    if (moveDirection === 'up') {
-        snake[0] = [snake[0][0], snake[0][1] - cellSize]
-        movingAndIncrease()
-    } else if (moveDirection === 'down') {
-
-        snake[0] = [snake[0][0], parseInt(snake[0][1]) + cellSize]
-        movingAndIncrease()
-    } else if (moveDirection === 'left') {
-        snake[0] = [snake[0][0] - cellSize, snake[0][1]]
-        movingAndIncrease()
-    } else if (moveDirection === 'right') {
-        snake[0] = [parseInt(snake[0][0]) + cellSize, snake[0][1]]
-        movingAndIncrease()
-    } else if (moveDirection === 'pause') {
-        // nothing
-    } else if (moveDirection === 'esc') {
-        console.log('leave the game')
-        isGameOver = true
+    switch (moveDirection) {
+        case 'up':
+            snake[0] = [snake[0][0], snake[0][1] - cellSize]
+            moveAndIncreasSnake()
+            break
+        case 'down':
+            snake[0] = [snake[0][0], parseInt(snake[0][1]) + cellSize]
+            moveAndIncreasSnake()
+            break
+        case 'left':
+            snake[0] = [snake[0][0] - cellSize, snake[0][1]]
+            moveAndIncreasSnake()
+            break
+        case 'right':
+            snake[0] = [parseInt(snake[0][0]) + cellSize, snake[0][1]]
+            moveAndIncreasSnake()
+            break
+        case 'pause':
+            break
+        case 'exit':
+            console.log('leave the game')
+            isGameOver = true
+            break
     }
 
-    /* moving snake and increase if is it needed  */
-    function movingAndIncrease() {
+    function moveAndIncreasSnake() {
+        // moving all over snake head
         for (let i = 1; i < snake.length; i++) {
             snake[i] = temp_snake[i - 1]
         }
+
+        // increase if is it needed 
         if (isIncrease) {
             snake.push(temp_snake[length])
             isIncrease = false
         }
     }
 }
+
+
+
 
 /* Check keyboard */
 function keyDown(key) { // physical keys
@@ -215,8 +227,7 @@ function keyDown(key) { // physical keys
                 gameRestart()
                 break
             case 27: // esc
-                isGameOver = true
-                break
+                return 'exit'
             case 189: // +
                 timeSpeed += 25
                 break
@@ -264,9 +275,12 @@ function gameRestart() {
     color_snakeHead = generateColor(210, 180, 180)
 }
 
+/* Colission */
 function colission() {
+    snakeHead = snake[0] // update head
+    snakeTail = snake[0] // update tail
+
     // fruit
-    const snakeHead = snake[0]
     if (snakeHead[0] === fruit[0] && snakeHead[1] === fruit[1]) {
         isFruitTaken = false
         isIncrease = true
@@ -308,57 +322,108 @@ function colission() {
 
 /* modes switches */
 function changePortalMode() {
-    // portalMode === true ? portalMode = false : portalMode = true
-
     const htmlButton = document.getElementById('portal-mode')
-    if (isPortalMode === true) {
-        htmlButton.innerHTML = `turn on porta mode`
-        isPortalMode = false
-    } else {
-        isPortalMode = true
-        htmlButton.innerHTML = `<b>turn off portal mode</b>`
-    }
+
+    isPortalMode = (function () {
+        switch (isPortalMode) {
+            case true:
+                htmlButton.innerHTML = `<p>turn on portal</p>`
+                htmlButton.className = 'bt-on'
+                return false
+            case false:
+                htmlButton.innerHTML = `<p>turn off portal</p>`
+                htmlButton.className = 'bt-off'
+                return true
+        }
+    }())
 }
 
 function changeAimMode() {
     const htmlButton = document.getElementById('aim-mode')
-    if (isAimMode === true) {
-        htmlButton.innerHTML = `turn on aim mode`
-        isAimMode = false
-        moveDirection = 'pause'
-    } else {
-        isAimMode = true
-        htmlButton.innerHTML = `<b>turn off aim mode</b>`
-    }
+
+    isAimMode = (function () {
+        switch (isAimMode) {
+            case true:
+                moveDirection = 'pause'
+
+                htmlButton.innerHTML = `<p>turn on aim mode</p>`
+                htmlButton.className = 'bt-on'
+                return false
+            case false:
+                htmlButton.innerHTML = `<p>turn off aim</p>`
+                htmlButton.className = 'bt-off'
+                return true
+        }
+    }())
 }
 
 function changeSnakeInSelfMode() {
     const htmlButton = document.getElementById('snake-in-self-mode')
-    if (isSnakeInSelfMode === true) {
-        htmlButton.innerHTML = `turn on snake in self`
-        isSnakeInSelfMode = false
-    } else {
-        isSnakeInSelfMode = true
-        htmlButton.innerHTML = `<b>turn off snake in self mode</b>`
-    }
+
+    isSnakeInSelfMode = (function () {
+        switch (isSnakeInSelfMode) {
+            case true:
+                htmlButton.innerHTML = `<p>turn on snake in self</p>`
+                htmlButton.className = 'bt-on'
+                return false
+            case false:
+                htmlButton.innerHTML = `<p>turn off snake in self</p>`
+                htmlButton.className = 'bt-off'
+                return true
+        }
+    }())
+}
+
+function changeMovingBackwardMode() {
+    const htmlButton = document.getElementById('moving-backward-mode')
+
+    isMovingBackwardMode = (function () {
+        switch (isMovingBackwardMode) {
+            case true:
+                htmlButton.innerHTML = `<p>turn on moving backward</p>`
+                htmlButton.className = 'bt-on'
+                return false
+            case false:
+                htmlButton.innerHTML = `<p>turn off moving backward</p>`
+                htmlButton.className = 'bt-off'
+                return true
+        }
+    }())
 }
 
 /* modes */
 function aimMode() {
     moveDirection = (function () {
-        // find fruit and moving
-        if (fruit[0, 0] > snake[0][0]) {
-            return 'right'
-        } else if (fruit[0, 0] < snake[0][0]) {
-            return 'left'
-        } else if (fruit[0, 1] < snake[0][1]) {
+        let temp_direction
+        let isMoveUp = true,
+            isMoveDown = true,
+            isMoveLeft = true,
+            isMoveRight = true
+
+        /* TODO: blocking wrong direction */
+        // up
+        temp_direction = [snakeHead[0], snakeHead[1] - cellSize]
+        drawingOneCell(temp_direction)
+        // down
+        // left
+        // right
+
+        /* find fruit and moving in this direction */
+        if (fruit[0, 1] < snake[0][1] && isMoveUp) {
             return 'up'
-        } else if (fruit[0, 1] > snake[0][1]) {
+        }
+        if (fruit[0, 1] > snake[0][1] && isMoveDown) {
             return 'down'
         }
-        // TODO: check self body
-        // TODO: check walls
+        if (fruit[0, 0] < snake[0][0] && isMoveLeft) {
+            return 'left'
+        }
+        if (fruit[0, 0] > snake[0][0] && isMoveRight) {
+            return 'right'
+        }
 
+        // if is it returned, snake moving in walls or in body
+        console.log('bad move')
         return moveDirection
     }())
 }

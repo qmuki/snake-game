@@ -6,8 +6,10 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body onload="startGame()" onkeydown="keyDown()">
-
+<body onload="startGame(); changePortalMode(); changeAimMode(); changeSnakeInSelfMode(); changeMovingBackwardMode()"
+    onkeydown="keyDown()">
+    <!-- turn off all modes -->
+    
     <!-- settings -->
     <!-- in pixels -->
     <input id="input-cell-size" value="40" hidden>
@@ -16,14 +18,16 @@
     <input id="time-speed" value="100" hidden>
 
     <!-- modes -->
-    modes:
-    <button id="portal-mode" value="off" type="checkbox" onclick="changePortalMode()">turn on portal</button>
-    <button id="aim-mode" value="off" type="checkbox" onclick="changeAimMode()">turn on aim</button>
-    <button id="snake-in-self-mode" value="off" type="checkbox" onclick="changeSnakeInSelfMode()">turn on snake in self</button>
+    <div class="modes">
+        <p>modes toggles:</p>
+        <button id="portal-mode" onclick="changePortalMode()"></button>
+        <button id="aim-mode" onclick="changeAimMode()"></button>
+        <button id="snake-in-self-mode" onclick="changeSnakeInSelfMode()"></button>
+        <button id="moving-backward-mode" onclick="changeMovingBackwardMode()"></button>
+    </div>
 
     <!-- game -->
     <canvas id="canvas">Your browser doesn't support canvas.</canvas>
-    
 
 
     <!-- virtual keys -->
@@ -34,8 +38,9 @@
     <button id="right" onmousedown="virtualKeyDown('right')" hidden>right</button>
     <button id="pause" onmousedown="virtualKeyDown('pause')" hidden>pause</button>
     <button id="restart" onmousedown="virtualKeyDown('restart')" hidden>restart</button>
-    <button id="speed-increase" onmousedown="virtualKeyDown('speed-increase')" >+</button>
-    <button id="speed-decrease" onmousedown="virtualKeyDown('speed-decrease')" >-</button>
+    <!-- FIXME: buttons don't works -->
+    <button id="speed-increase" onmousedown="virtualKeyDown('speed-increase')">+</button>
+    <button id="speed-decrease" onmousedown="virtualKeyDown('speed-decrease')">-</button>
 
 
     <!-- javascript -->
