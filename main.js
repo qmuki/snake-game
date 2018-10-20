@@ -268,10 +268,10 @@ function keyDown(key) { // physical keys
                 break
             case 27: // esc
                 return 'exit'
-            case 189: // +
+            case 189: // -
                 timeSpeed += 25
                 break
-            case 187: // -
+            case 187: // +
                 timeSpeed < 26 ? timeSpeed = 1 : timeSpeed -= 25
                 break
         }
@@ -281,7 +281,7 @@ function keyDown(key) { // physical keys
 
 function virtualKeyDown(key) { // virtual keys
     moveDirection = (function () {
-        switch (key.keyCode) {
+        switch (key) {
             case 'up':
                 return 'up'
             case 'down':
@@ -296,10 +296,10 @@ function virtualKeyDown(key) { // virtual keys
                 gameRestart()
                 break
             case 'speed-increase':
-                timeSpeed += 25
+                timeSpeed < 26 ? timeSpeed = 1 : timeSpeed -= 25
                 break
             case 'speed-decrease':
-                timeSpeed < 26 ? timeSpeed = 1 : timeSpeed -= 25
+                timeSpeed += 25
                 break
         }
         return moveDirection
