@@ -48,7 +48,6 @@ let fruit = []
 
 /* updating in colission */
 let snakeHead = []
-let snakeTail = []
 
 /* update in move */
 let lastDirection
@@ -88,7 +87,6 @@ function render() {
 
     /* Update variables */
     snakeHead = snake[0]
-    snakeTail = snake[0]
 
     /* Physics collisions with walls, snake in self, fruit */
     colission()
@@ -132,7 +130,7 @@ function drawingSnake() {
         ctx.fillRect(snake[i][0], snake[i][1], cellSize, cellSize)
     }
     ctx.fillStyle = color_snakeHead
-    ctx.fillRect(snake[0][0], snake[0][1], cellSize, cellSize)
+    ctx.fillRect(snakeHead[0], snakeHead[1], cellSize, cellSize)
 }
 
 function drawingFruit() {
@@ -222,22 +220,22 @@ function move() {
 
     /* move snakeHead */
     function moveUp() {
-        snake[0] = [snake[0][0], snake[0][1] - cellSize]
+        snake[0] = [snakeHead[0], snakeHead[1] - cellSize]
         moving()
     }
 
     function moveDown() {
-        snake[0] = [snake[0][0], parseInt(snake[0][1]) + cellSize]
+        snake[0] = [snakeHead[0], parseInt(snakeHead[1]) + cellSize]
         moving()
     }
 
     function moveLeft() {
-        snake[0] = [snake[0][0] - cellSize, snake[0][1]]
+        snake[0] = [snakeHead[0] - cellSize, snakeHead[1]]
         moving()
     }
 
     function moveRight() {
-        snake[0] = [parseInt(snake[0][0]) + cellSize, snake[0][1]]
+        snake[0] = [parseInt(snakeHead[0]) + cellSize, snakeHead[1]]
         moving()
     }
 }
@@ -342,16 +340,16 @@ function colission() {
 
     // walls
     if (isPortalMode === true) { // portal mode - on
-        if (snake[0][0] < 0)
+        if (snakeHead[0] < 0)
             snake[0][0] = gameWindowWidth - cellSize
-        else if (snake[0][1] < 0)
+        else if (snakeHead[1] < 0)
             snake[0][1] = gameWindowHeight - cellSize
-        else if (snake[0][0] >= gameWindowWidth)
+        else if (snakeHead[0] >= gameWindowWidth)
             snake[0][0] = 0
-        else if (snake[0][1] >= gameWindowHeight)
+        else if (snakeHead[1] >= gameWindowHeight)
             snake[0][1] = 0
     } else { // portal mode - off
-        if (snake[0][0] < 0 || snake[0][1] < 0 || snake[0][0] >= gameWindowWidth || snake[0][1] >= gameWindowHeight) {
+        if (snakeHead[0] < 0 || snakeHead[1] < 0 || snakeHead[0] >= gameWindowWidth || snakeHead[1] >= gameWindowHeight) {
             color_snake = color_snakeDead
             color_snakeHead = color_snakeDead
             console.log('crash with walls')
@@ -454,16 +452,16 @@ function aimMode() {
         // right
 
         /* find fruit and moving in this direction */
-        if (fruit[0, 1] < snake[0][1] && isMoveUp) {
+        if (fruit[0, 1] < snakeHead[1] && isMoveUp) {
             return 'up'
         }
-        if (fruit[0, 1] > snake[0][1] && isMoveDown) {
+        if (fruit[0, 1] > snakeHead[1] && isMoveDown) {
             return 'down'
         }
-        if (fruit[0, 0] < snake[0][0] && isMoveLeft) {
+        if (fruit[0, 0] < snakeHead[0] && isMoveLeft) {
             return 'left'
         }
-        if (fruit[0, 0] > snake[0][0] && isMoveRight) {
+        if (fruit[0, 0] > snakeHead[0] && isMoveRight) {
             return 'right'
         }
 
