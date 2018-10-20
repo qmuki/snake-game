@@ -26,7 +26,9 @@ let isIncrease = false
 let isUpdateColission = true
 
 // colors
-let Colors = {}
+// TODO: let Colors = {} // all colors here
+let color_aimTrue = 'rgba(0, 0, 255, 0.1)'
+let color_aimFalse = 'rgba(255, 255, 0, 0.8)'
 let color_canvasBody = '#f0f0f0'
 let color_snake = generateColor(255, 190, 220)
 let color_snakeHead = generateColor(210, 180, 180)
@@ -138,8 +140,8 @@ function drawingFruit() {
     ctx.fillRect(fruit[0], fruit[1], cellSize, cellSize)
 }
 
-function drawingOneCell(cellCoordinates) {
-    ctx.fillStyle = 'blue'
+function drawOneCell(cellCoordinates, color) {
+    ctx.fillStyle = color
     ctx.fillRect(cellCoordinates[0], cellCoordinates[1], cellSize, cellSize)
 }
 
@@ -438,21 +440,76 @@ function changeMovingBackwardMode() {
 }
 
 /* modes */
+// Aim v2.0 FIXME: Crash with walls when trying moving backward
 function aimMode() {
     moveDirection = (function () {
         let temp_direction
-        let isMoveUp = true,
-            isMoveDown = true,
-            isMoveLeft = true,
-            isMoveRight = true
 
-        /* TODO: blocking wrong direction */
-        // up
-        temp_direction = [snakeHead[0], snakeHead[1] - cellSize]
-        drawingOneCell(temp_direction)
-        // down
-        // left
-        // right
+        let isMoveUp,
+            isMoveDown,
+            isMoveLeft,
+            isMoveRight
+
+        // Up
+        isMoveUp = (function () {
+            temp_direction = [snakeHead[0], snakeHead[1] - cellSize] // find direction  
+
+            // she'll never go in to wall
+            if (temp_direction[1] < 0) console.log('walls') // block move if is it walls
+
+            // FIXME: Perfomance: Call it 1 time for all directions
+            checkSelfBody(temp_direction)
+
+            // default
+            return true
+        }())
+        isMoveUp ? drawOneCell(temp_direction, color_aimTrue) : drawOneCell(temp_direction, color_aimFalse) // draw
+
+        // Down
+        isMoveDown = (function () {
+            temp_direction = [snakeHead[0], parseInt(snakeHead[1]) + cellSize]
+
+            if (temp_direction[1] >= gameWindowHeight) return false
+
+            checkSelfBody(temp_direction)
+
+            return true
+        }())
+        isMoveDown ? drawOneCell(temp_direction, color_aimTrue) : drawOneCell(temp_direction, color_aimFalse)
+
+        // Left
+        isMoveLeft = (function() {
+            temp_direction = [snakeHead[0] - cellSize, snakeHead[1]]
+
+            if (temp_direction[0] < 0) return false
+
+            checkSelfBody(temp_direction)
+
+            return true
+        }())
+        isMoveLeft ? drawOneCell(temp_direction, color_aimTrue) : drawOneCell(temp_direction, color_aimFalse)
+
+        // Right
+        isMoveRight = (function() {
+            temp_direction = [parseInt(snakeHead[0]) + cellSize, snakeHead[1]]
+
+            if (temp_direction[0] >= gameWindowWidth) return false
+
+            checkSelfBody(temp_direction)
+
+            return true
+        }())
+        isMoveRight ? drawOneCell(temp_direction, color_aimTrue) : drawOneCell(temp_direction, color_aimFalse)
+
+
+        function checkSelfBody(direction) {
+            for (let i = 1; i < snake.length; i++) {
+                if (direction[0] === snake[i][0] && direction[1] === snake[i][1])
+                    return false
+            }
+        }
+
+        
 
         /* find fruit and moving in this direction */
         if (fruit[0, 1] < snakeHead[1] && isMoveUp) {
@@ -468,8 +525,6 @@ function aimMode() {
             return 'right'
         }
 
-        // if is it returned, snake moving in walls or in body
-        console.log('bad move')
         return moveDirection
     }())
 }
