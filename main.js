@@ -23,6 +23,8 @@ let isGameOver = false
 let isFruitTaken = false
 let isIncrease = false
 
+let isUpdateColission = true
+
 // colors
 let Colors = {}
 let color_canvasBody = '#f0f0f0'
@@ -48,6 +50,8 @@ let fruit = []
 let snakeHead = []
 let snakeTail = []
 
+/* update in move */
+let lastDirection
 
 
 
@@ -79,9 +83,12 @@ function render() {
     drawingCanvasBody()
 
     /* Check keyboard and move snake */
-    move()
+    if (moveDirection !== 'pause')
+        move()
 
-
+    /* Update variables */
+    snakeHead = snake[0]
+    snakeTail = snake[0]
 
     /* Physics collisions with walls, snake in self, fruit */
     colission()
@@ -161,42 +168,77 @@ function generateFruit() {
 function move() {
     const temp_snake = snake.slice()
 
+    // move snakeHead and checking blocking ways
     switch (moveDirection) {
         case 'up':
-            snake[0] = [snake[0][0], snake[0][1] - cellSize]
-            moveAndIncreasSnake()
+            if (lastDirection === 'down') {
+                moveDirection = lastDirection
+                moveDown()
+                break
+            }
+            moveUp()
             break
         case 'down':
-            snake[0] = [snake[0][0], parseInt(snake[0][1]) + cellSize]
-            moveAndIncreasSnake()
+            if (lastDirection === 'up') {
+                moveDirection = lastDirection
+                moveUp()
+                break
+            }
+            moveDown()
             break
         case 'left':
-            snake[0] = [snake[0][0] - cellSize, snake[0][1]]
-            moveAndIncreasSnake()
+            if (lastDirection === 'right') {
+                moveDirection = lastDirection
+                moveRight()
+                break
+            }
+            moveLeft()
             break
         case 'right':
-            snake[0] = [parseInt(snake[0][0]) + cellSize, snake[0][1]]
-            moveAndIncreasSnake()
-            break
-        case 'pause':
-            break
-        case 'exit':
-            console.log('leave the game')
-            isGameOver = true
+            if (lastDirection === 'left') {
+                moveDirection = lastDirection
+                moveLeft()
+                break
+            }
+            moveRight()
             break
     }
 
-    function moveAndIncreasSnake() {
-        // moving all over snake head
+    /* move snake array over snake head */
+    function moving() {
         for (let i = 1; i < snake.length; i++) {
             snake[i] = temp_snake[i - 1]
         }
 
-        // increase if is it needed 
+        // increase snake if is it needed 
         if (isIncrease) {
             snake.push(temp_snake[length])
             isIncrease = false
         }
+
+        // update lastDirection
+        if (!isMovingBackwardMode) lastDirection = moveDirection
+    }
+
+    /* move snakeHead */
+    function moveUp() {
+        snake[0] = [snake[0][0], snake[0][1] - cellSize]
+        moving()
+    }
+
+    function moveDown() {
+        snake[0] = [snake[0][0], parseInt(snake[0][1]) + cellSize]
+        moving()
+    }
+
+    function moveLeft() {
+        snake[0] = [snake[0][0] - cellSize, snake[0][1]]
+        moving()
+    }
+
+    function moveRight() {
+        snake[0] = [parseInt(snake[0][0]) + cellSize, snake[0][1]]
+        moving()
     }
 }
 
@@ -273,13 +315,12 @@ function gameRestart() {
 
     color_snake = generateColor(255, 190, 220)
     color_snakeHead = generateColor(210, 180, 180)
+
+    lastDirection = NaN
 }
 
 /* Colission */
 function colission() {
-    snakeHead = snake[0] // update head
-    snakeTail = snake[0] // update tail
-
     // fruit
     if (snakeHead[0] === fruit[0] && snakeHead[1] === fruit[1]) {
         isFruitTaken = false
@@ -380,10 +421,14 @@ function changeMovingBackwardMode() {
     isMovingBackwardMode = (function () {
         switch (isMovingBackwardMode) {
             case true:
+                lastDirection = moveDirection
+
                 htmlButton.innerHTML = `<p>turn on moving backward</p>`
                 htmlButton.className = 'bt-on'
                 return false
             case false:
+                lastDirection = NaN
+
                 htmlButton.innerHTML = `<p>turn off moving backward</p>`
                 htmlButton.className = 'bt-off'
                 return true
