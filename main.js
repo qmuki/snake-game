@@ -313,8 +313,11 @@ function gameRestart() {
 
     color_snake = generateColor(255, 190, 220)
     color_snakeHead = generateColor(210, 180, 180)
+    color_fruit = generateColor(150, 210, 210) // FIXME: it's working without this, but buggy
 
     lastDirection = NaN
+
+    snakeHead = snake[0]
 }
 
 /* Colission */
