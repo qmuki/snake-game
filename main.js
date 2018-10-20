@@ -368,11 +368,11 @@ function changePortalMode() {
     isPortalMode = (function () {
         switch (isPortalMode) {
             case true:
-                htmlButton.innerHTML = `<p>turn on portal</p>`
+                htmlButton.innerHTML = `<p>portal on</p>`
                 htmlButton.className = 'bt-on'
                 return false
             case false:
-                htmlButton.innerHTML = `<p>turn off portal</p>`
+                htmlButton.innerHTML = `<p>portal off</p>`
                 htmlButton.className = 'bt-off'
                 return true
         }
@@ -387,11 +387,11 @@ function changeAimMode() {
             case true:
                 moveDirection = 'pause'
 
-                htmlButton.innerHTML = `<p>turn on aim mode</p>`
+                htmlButton.innerHTML = `<p>aim mode on</p>`
                 htmlButton.className = 'bt-on'
                 return false
             case false:
-                htmlButton.innerHTML = `<p>turn off aim</p>`
+                htmlButton.innerHTML = `<p>aim</p> off`
                 htmlButton.className = 'bt-off'
                 return true
         }
@@ -404,11 +404,11 @@ function changeSnakeInSelfMode() {
     isSnakeInSelfMode = (function () {
         switch (isSnakeInSelfMode) {
             case true:
-                htmlButton.innerHTML = `<p>turn on snake in self</p>`
+                htmlButton.innerHTML = `<p>snake in self on</p>`
                 htmlButton.className = 'bt-on'
                 return false
             case false:
-                htmlButton.innerHTML = `<p>turn off snake in self</p>`
+                htmlButton.innerHTML = `<p>snake in self off</p>`
                 htmlButton.className = 'bt-off'
                 return true
         }
@@ -423,13 +423,13 @@ function changeMovingBackwardMode() {
             case true:
                 lastDirection = moveDirection
 
-                htmlButton.innerHTML = `<p>turn on moving backward</p>`
+                htmlButton.innerHTML = `<p>moving backward on</p>`
                 htmlButton.className = 'bt-on'
                 return false
             case false:
                 lastDirection = NaN
 
-                htmlButton.innerHTML = `<p>turn off moving backward</p>`
+                htmlButton.innerHTML = `<p>moving backward off</p>`
                 htmlButton.className = 'bt-off'
                 return true
         }
