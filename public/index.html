@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<!-- turn off all modes -->
+<body onload="startGame(); changePortalMode(); changeAimMode(); changeSnakeInSelfMode(); changeMovingBackwardMode()"
+ onkeydown="keyDown()">
+
+
+	<!-- modes -->
+	<div class="modes">
+		<button id="portal-mode" onclick="changePortalMode()"></button>
+		<button id="aim-mode" onclick="changeAimMode()"></button>
+		<button id="snake-in-self-mode" onclick="changeSnakeInSelfMode()"></button>
+		<button id="moving-backward-mode" onclick="changeMovingBackwardMode()"></button>
+	</div>
+
+	<!-- game -->
+	<canvas id="canvas">Your browser doesn't support canvas.</canvas>
+
+	<!-- javascript -->
+	<script src="../build/bundle.js"></script>
+</body>
+
+</html>

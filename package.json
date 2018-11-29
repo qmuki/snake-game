@@ -1,0 +1,20 @@
+{
+  "name": "the-snake",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "watch": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://0lun@bitbucket.org/0lun/the-snake.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/0lun/the-snake#readme",
+  "dependencies": {
+    "typescript": "^3.1.6"
+  }
+}
