@@ -7,23 +7,21 @@
 </head>
 
 <!-- turn off all modes -->
-<body onload="startGame(); changePortalMode(); changeAimMode(); changeSnakeInSelfMode(); changeMovingBackwardMode()"
- onkeydown="keyDown()">
-
+<body>
 
 	<!-- modes -->
 	<div class="modes">
-		<button id="portal-mode" onclick="changePortalMode()"></button>
-		<button id="aim-mode" onclick="changeAimMode()"></button>
-		<button id="snake-in-self-mode" onclick="changeSnakeInSelfMode()"></button>
-		<button id="moving-backward-mode" onclick="changeMovingBackwardMode()"></button>
+		<button id="portal">portal</button>
+		<button id="aim">aim</button>
+		<button id="snake-in-self">snake in self</button>
+		<button id="moving-backward">moving backward</button>
 	</div>
 
 	<!-- game -->
 	<canvas id="canvas">Your browser doesn't support canvas.</canvas>
 
 	<!-- javascript -->
-	<script src="../build/bundle.js"></script>
+	<script src="../dist/bundle.js"></script>
 </body>
 
 </html>

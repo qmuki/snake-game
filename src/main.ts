@@ -1,3 +1,6 @@
+// Import modes
+import { modes } from './Modes'
+
 // Settings
 let cellSize: number = 40
 let timeSpeed: number = 100
@@ -8,12 +11,6 @@ const gameWindowHeight: number = 600
 
 const canvas = <HTMLCanvasElement>document.getElementById('canvas')
 const ctx = <CanvasRenderingContext2D>canvas.getContext('2d')
-
-// modes
-let isPortalMode = true // walls portal
-let isAimMode = true // snake aim
-let isSnakeInSelfMode = true // snake eat self
-let isMovingBackwardMode = true // snake moving backward
 
 // game's logic
 let isGameOver = false
@@ -50,31 +47,23 @@ let snakeHead: Array<number> = []
 /* update in move */
 let lastDirection: string
 
-
-function startGame() {
+/* Auto-start game */
+window.onload = () => {
 	/* setup resolution of the canvas in html */
 	ctx.canvas.width = gameWindowWidth
 	ctx.canvas.height = gameWindowHeight
 
-	gameLoop()
+	loop()
 }
 
 /* Game loop */
-async function gameLoop() { // async for sleeping
-	function sleep(ms: number) {
-		return new Promise(resolve => setTimeout(resolve, ms))
-	}
-
-	while (isGameOver === false) {
+async function loop() { // async for sleeping
+	const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 		await sleep(timeSpeed)
-		render()
-	}
-}
+	loop()
 
-function render() {
 	/* clear canvas */
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
-	drawingCanvasBody()
 
 	/* Check keyboard and move snake */
 	if (moveDirection !== 'pause')
@@ -98,7 +87,7 @@ function render() {
 	drawingSnake()
 
 	/* aim mode */
-	if (isAimMode === true)
+	if (modes.aim.isEnabled === true)
 		aimMode()
 
 
@@ -106,11 +95,6 @@ function render() {
 
 
 /* Drawing */
-function drawingCanvasBody() {
-	ctx.fillStyle = color_canvasBody
-	ctx.fillRect(0, 0, gameWindowWidth, gameWindowHeight)
-}
-
 function drawingSnake() {
 	ctx.fillStyle = color_snake
 	for (let i = 0; i < snake.length; i++) {
@@ -202,7 +186,7 @@ function move() {
 		}
 
 		// update lastDirection
-		if (!isMovingBackwardMode) lastDirection = moveDirection
+		if (!modes.movingBackward.isEnabled) lastDirection = moveDirection
 	}
 
 	/* move snakeHead */
@@ -229,7 +213,7 @@ function move() {
 
 
 /* Check keyboard */
-function keyDown(key: any) { // physical keys
+window.onkeydown = function keyDown(key: any) { // physical keys
 	key = key || window.event
 
 	moveDirection = (function () {
@@ -287,7 +271,7 @@ function collision() {
 	}
 
 	// snake in self
-	if (!isSnakeInSelfMode) {
+	if (!modes.snakeInSelf.isEnabled) {
 		for (let i = 1; i < snake.length; i++) {
 			if (snakeHead[0] === snake[i][0] && snakeHead[1] === snake[i][1]) {
 				color_snake = color_snakeDead
@@ -318,81 +302,6 @@ function collision() {
 			// isGameOver = true
 		}
 	}
-}
-
-/* modes switches */
-function changePortalMode() {
-	const htmlButton = <HTMLElement>document.getElementById('portal-mode')
-
-	isPortalMode = (function () {
-		switch (isPortalMode) {
-			case true:
-				htmlButton.innerHTML = `<p>portal on</p>`
-				htmlButton.className = 'bt-on'
-				return false
-			case false:
-				htmlButton.innerHTML = `<p>portal off</p>`
-				htmlButton.className = 'bt-off'
-				return true
-		}
-	}())
-}
-
-function changeAimMode() {
-	const htmlButton = <HTMLElement>document.getElementById('aim-mode')
-
-	isAimMode = (function () {
-		switch (isAimMode) {
-			case true:
-				moveDirection = 'pause'
-
-				htmlButton.innerHTML = `<p>aim mode on</p>`
-				htmlButton.className = 'bt-on'
-				return false
-			case false:
-				htmlButton.innerHTML = `<p>aim</p> off`
-				htmlButton.className = 'bt-off'
-				return true
-		}
-	}())
-}
-
-function changeSnakeInSelfMode() {
-	const htmlButton = <HTMLElement>document.getElementById('snake-in-self-mode')
-
-	isSnakeInSelfMode = (function () {
-		switch (isSnakeInSelfMode) {
-			case true:
-				htmlButton.innerHTML = `<p>snake in self on</p>`
-				htmlButton.className = 'bt-on'
-				return false
-			case false:
-				htmlButton.innerHTML = `<p>snake in self off</p>`
-				htmlButton.className = 'bt-off'
-				return true
-		}
-	}())
-}
-
-function changeMovingBackwardMode() {
-	const htmlButton = <HTMLElement>document.getElementById('moving-backward-mode')
-
-	isMovingBackwardMode = (function () {
-		switch (isMovingBackwardMode) {
-			case true:
-				lastDirection = moveDirection
-
-				htmlButton.innerHTML = `<p>moving backward on</p>`
-				htmlButton.className = 'bt-on'
-				return false
-			case false:
-				lastDirection = ''
-
-				htmlButton.innerHTML = `<p>moving backward off</p>`
-				htmlButton.className = 'bt-off'
-				return true
-		}
-	}())
 }
 
 /* modes */

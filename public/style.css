@@ -1,8 +1,37 @@
-#canvas {
-	border: 1px solid #d3d3d3;
+body {
+	/* delete free space */
+	margin: 0;
+	padding: 0;
+
+	/* disable page scrolling */
+	overflow: hidden;
 }
 
-/* modes */
+canvas {
+	/* full screen */
+	/* width: 100%;
+	height: 100%; */
+	position: absolute;
+
+	/* pre-load color */
+	background-color: rgba(231, 237, 245, 0.3);
+}
+
+/* Buttons - all */
+.modes button:hover {
+	background-color: rgba(178, 190, 199, 0.26);
+	cursor: pointer;
+}
+
+.modes button:active {
+	background-color: rgba(172, 218, 255, 0.253);
+}
+
+button:focus {
+	outline: none;
+}
+
+/* Modes */
 .modes p {
 	display: inline;
 
@@ -12,21 +41,21 @@
 }
 
 .modes button {
+	/* cancel default style */
 	border: 0;
-	border-radius: 5px;
+	margin-left: -4px;
 
+	/* style */
 	padding: .25em .5rem;
 
-	margin: auto 0.2em;
-	margin-bottom: 8px;
+	background-color: rgba(231, 237, 245, 0.3);
 }
 
-/* js buttons */
-.bt-on {
-	background-color: rgb(242, 242, 242);
-}
-
+/* Classes called from JS */
 .bt-off {
-	background-color: rgba(255, 0, 0, 0.15);
+	background-color: rgba(231, 237, 245, 0.3);
+}
 
+.bt-on {
+	background-color: #ff000030 !important;
 }
