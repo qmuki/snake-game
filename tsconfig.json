@@ -2,17 +2,17 @@
   "compilerOptions": {
     /* Basic Options */
     "target": "es6",
-    "module": "amd",
+    "module": "commonjs",
     // "lib": [],
     // "allowJs": true,
     // "checkJs": true,
     // "jsx": "preserve",
     // "declaration": true,
     // "declarationMap": true,
-    "sourceMap": true,
-    "outFile": "./build/bundle.js",
-    // "outDir": "./",
-    "rootDir": "./src",
+    // "sourceMap": true,
+    // "outFile": "./build/bundle.js",
+    // "outDir": "./build/",
+    // "rootDir": "./src",
     // "composite": true,
     // "removeComments": true,
     // "noEmit": true,
@@ -58,6 +58,6 @@
     "node_modules"
   ],
   "include": [
-    "src"
+    "src/"
   ]
 }

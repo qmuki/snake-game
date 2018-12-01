@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "watch": "tsc -w"
+    "dev": "webpack-dev-server --mode development --open",
+    "build": "webpack --config conjfig/webpack.prod.js"
   },
   "repository": {
     "type": "git",
@@ -14,7 +15,12 @@
   "author": "",
   "license": "ISC",
   "homepage": "https://bitbucket.org/0lun/the-snake#readme",
-  "dependencies": {
-    "typescript": "^3.1.6"
+  "devDependencies": {
+    "path": "^0.12.7",
+    "ts-loader": "^5.3.1",
+    "typescript": "^3.2.1",
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   }
 }
