@@ -3,22 +3,6 @@
 		/* Basic Options */
 		"target": "es6",
 		"module": "commonjs",
-		// "lib": [],
-		// "allowJs": true,
-		// "checkJs": true,
-		// "jsx": "preserve",
-		// "declaration": true,
-		// "declarationMap": true,
-		// "sourceMap": true,
-		// "outFile": "./build/bundle.js",
-		// "outDir": "./build/",
-		// "rootDir": "./src",
-		// "composite": true,
-		// "removeComments": true,
-		// "noEmit": true,
-		// "importHelpers": true,
-		// "downlevelIteration": true,
-		// "isolatedModules": true,
 
 		/* Strict Type-Checking Options */
 		"strict": true,
@@ -28,32 +12,15 @@
 		"strictPropertyInitialization": true,
 		"noImplicitThis": true,
 		"alwaysStrict": true,
+
 		/* Additional Checks */
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
+
 		/* Module Resolution Options */
-		// "moduleResolution": "node",
-		// "baseUrl": "./",
-		// "paths": {},
-		// "rootDirs": [],
-		// "typeRoots": [],
-		// "types": [],
-		// "allowSyntheticDefaultImports": true,
+		"moduleResolution": "node",
 		"esModuleInterop": true
-		// "preserveSymlinks": true,
-
-		/* Source Map Options */
-		// "sourceRoot": "",
-		// "mapRoot": "",
-		// "inlineSourceMap": true,
-		// "inlineSources": true,
-
-		/* Experimental Options */
-		// "experimentalDecorators": true,
-		// "emitDecoratorMetadata": true,
-	},
-	"exclude": ["node_modules"],
-	"include": ["src/"]
+	}
 }
