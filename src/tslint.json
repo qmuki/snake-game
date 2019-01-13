@@ -10,7 +10,8 @@
 		"no-empty": false,
 		"trailing-comma": false,
 		"curly": false,
-		"arrow-parens": false
+		"arrow-parens": false,
+		"no-console": false
 	},
 	"rulesDirectory": []
 }
