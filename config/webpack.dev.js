@@ -21,7 +21,7 @@ module.exports = {
 		publicPath: '/dist'
 	},
 	devServer: {
-		contentBase: path.join(__dirname, '../public'),
+		contentBase: path.join(__dirname, '../src'),
 		overlay: true
 	}
 }
