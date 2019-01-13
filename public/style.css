@@ -1,61 +1,6 @@
 body {
-	/* delete free space */
 	margin: 0;
 	padding: 0;
-
-	/* disable page scrolling */
+	
 	overflow: hidden;
-}
-
-canvas {
-	/* full screen */
-	/* width: 100%;
-	height: 100%; */
-	position: absolute;
-
-	/* pre-load color */
-	background-color: rgba(231, 237, 245, 0.3);
-}
-
-/* Buttons - all */
-.modes button:hover {
-	background-color: rgba(178, 190, 199, 0.26);
-	cursor: pointer;
-}
-
-.modes button:active {
-	background-color: rgba(172, 218, 255, 0.253);
-}
-
-button:focus {
-	outline: none;
-}
-
-/* Modes */
-.modes p {
-	display: inline;
-
-	font-size: 14px;
-
-	font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-.modes button {
-	/* cancel default style */
-	border: 0;
-	margin-left: -4px;
-
-	/* style */
-	padding: .25em .5rem;
-
-	background-color: rgba(231, 237, 245, 0.3);
-}
-
-/* Classes called from JS */
-.bt-off {
-	background-color: rgba(231, 237, 245, 0.3);
-}
-
-.bt-on {
-	background-color: #ff000030 !important;
 }
