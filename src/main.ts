@@ -1,17 +1,13 @@
-/* Get canvas */
-const canvas: HTMLCanvasElement = document.getElementsByTagName('canvas')[0]
-// const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!
+import { Game } from './app/Game'
 
-/* Canvas initialize size */
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
+/* Initialize game */
+const game = new Game()
+console.log(game)
 
-/* Create gui menu */
-import * as dat from 'dat.gui'
-export const gui = new dat.GUI()
+/* Game loop */
+render()
 
-/* Create gui folder */
-const guiCanvas = gui.addFolder('Canvas')
-guiCanvas.open()
-guiCanvas.add(canvas, 'width', 0, window.innerWidth)
-guiCanvas.add(canvas, 'height', 0, window.innerHeight)
+function render() {
+	requestAnimationFrame(render)
+	game.renderer()
+}
