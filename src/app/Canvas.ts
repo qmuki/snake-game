@@ -3,9 +3,9 @@
  */
 export class Canvas {
 	/* Get canvas */
-	private _canvas: HTMLCanvasElement = document.getElementsByTagName(
-		'canvas'
-	)[0]
+	private _canvas: HTMLCanvasElement = document
+		.getElementById('game')!
+		.appendChild(document.createElement('canvas'))
 	private _ctx: CanvasRenderingContext2D = this._canvas.getContext('2d')!
 
 	/* Getters */
@@ -21,5 +21,7 @@ export class Canvas {
 		/* Canvas initialize size */
 		this._canvas.width = window.innerWidth
 		this._canvas.height = window.innerHeight
+
+		this._canvas.setAttribute('class', 'canvas')
 	}
 }

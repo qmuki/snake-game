@@ -5,18 +5,27 @@
 		<style>
 			body {
 				margin: 0;
-				overflow: hidden;
+				/* overflow: hidden; */
 			}
 
 			canvas {
-				background-color: rgba(0, 0, 0, 0.1);
+				background-color: rgba(0, 0, 0, 0);
+			}
+
+			#game {
+				position: relative;
+			}
+
+			.canvas {
+				position: absolute;
+				top: 0;
+				left: 0;
 			}
 		</style>
 	</head>
 
 	<body>
-		<!-- game -->
-		<canvas>Your browser doesn't support canvas.</canvas>
+		<div id="game"></div>
 
 		<!-- javascript -->
 		<script src="../dist/bundle.js"></script>

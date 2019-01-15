@@ -19,11 +19,17 @@ export interface IApple {
 	position: IPosition
 }
 
-export interface IColors {
-	walls: string
-	snake: {
-		head: string
-		body: string
+export interface IStyle {
+	colors: {
+		apple: string
+		backgroud: string
+		snake: string
+		walls: string
 	}
-	apple: string
+	gradient: {
+		r0: number
+		r1: number
+		transparency: number
+	}
+	gridPadding: number
 }
