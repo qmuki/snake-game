@@ -1,7 +1,6 @@
 "use strict"
 
 // Settings
-var game = {}
 let cellSize = parseInt(document.getElementById("input-cell-size").value)
 let timeSpeed = parseInt(document.getElementById("time-speed").value)
 
@@ -26,8 +25,6 @@ let isMovingBackwardMode = true // snake moving backward
 let isGameOver = false
 let isFruitTaken = false
 let isIncrease = false
-
-let isUpdateColission = true
 
 // colors
 let color_aimTrue = "rgba(0, 0, 255, 0.1)"
@@ -157,38 +154,38 @@ function move() {
 
 	// move snakeHead and checking blocking ways
 	switch (moveDirection) {
-		case "up":
-			if (lastDirection === "down") {
-				moveDirection = lastDirection
-				moveDown()
-				break
-			}
-			moveUp()
-			break
-		case "down":
-			if (lastDirection === "up") {
-				moveDirection = lastDirection
-				moveUp()
-				break
-			}
+	case "up":
+		if (lastDirection === "down") {
+			moveDirection = lastDirection
 			moveDown()
 			break
-		case "left":
-			if (lastDirection === "right") {
-				moveDirection = lastDirection
-				moveRight()
-				break
-			}
-			moveLeft()
+		}
+		moveUp()
+		break
+	case "down":
+		if (lastDirection === "up") {
+			moveDirection = lastDirection
+			moveUp()
 			break
-		case "right":
-			if (lastDirection === "left") {
-				moveDirection = lastDirection
-				moveLeft()
-				break
-			}
+		}
+		moveDown()
+		break
+	case "left":
+		if (lastDirection === "right") {
+			moveDirection = lastDirection
 			moveRight()
 			break
+		}
+		moveLeft()
+		break
+	case "right":
+		if (lastDirection === "left") {
+			moveDirection = lastDirection
+			moveLeft()
+			break
+		}
+		moveRight()
+		break
 	}
 
 	/* move snake array over snake head */
@@ -236,31 +233,31 @@ function keyDown(key) {
 
 	moveDirection = (function() {
 		switch (key.keyCode) {
-			case 38: // arrow up
-			case 87: // w
-				return "up"
-			case 40: // arrow down
-			case 83: // s
-				return "down"
-			case 37: // arrow left
-			case 65: // a
-				return "left"
-			case 39: // arrow right
-			case 68: // d
-				return "right"
-			case 32: // space
-				return "pause"
-			case 82: // r
-				gameRestart()
-				break
-			case 27: // esc
-				return "exit"
-			case 189: // -
-				timeSpeed += 25
-				break
-			case 187: // +
-				timeSpeed < 26 ? (timeSpeed = 1) : (timeSpeed -= 25)
-				break
+		case 38: // arrow up
+		case 87: // w
+			return "up"
+		case 40: // arrow down
+		case 83: // s
+			return "down"
+		case 37: // arrow left
+		case 65: // a
+			return "left"
+		case 39: // arrow right
+		case 68: // d
+			return "right"
+		case 32: // space
+			return "pause"
+		case 82: // r
+			gameRestart()
+			break
+		case 27: // esc
+			return "exit"
+		case 189: // -
+			timeSpeed += 25
+			break
+		case 187: // +
+			timeSpeed < 26 ? (timeSpeed = 1) : (timeSpeed -= 25)
+			break
 		}
 		return moveDirection
 	})()
@@ -270,25 +267,25 @@ function virtualKeyDown(key) {
 	// virtual keys
 	moveDirection = (function() {
 		switch (key) {
-			case "up":
-				return "up"
-			case "down":
-				return "down"
-			case "left":
-				return "left"
-			case "right":
-				return "right"
-			case "pause":
-				return "pause"
-			case "restart":
-				gameRestart()
-				break
-			case "speed-increase":
-				timeSpeed < 26 ? (timeSpeed = 1) : (timeSpeed -= 25)
-				break
-			case "speed-decrease":
-				timeSpeed += 25
-				break
+		case "up":
+			return "up"
+		case "down":
+			return "down"
+		case "left":
+			return "left"
+		case "right":
+			return "right"
+		case "pause":
+			return "pause"
+		case "restart":
+			gameRestart()
+			break
+		case "speed-increase":
+			timeSpeed < 26 ? (timeSpeed = 1) : (timeSpeed -= 25)
+			break
+		case "speed-decrease":
+			timeSpeed += 25
+			break
 		}
 		return moveDirection
 	})()
@@ -359,14 +356,14 @@ function changePortalMode() {
 
 	isPortalMode = (function() {
 		switch (isPortalMode) {
-			case true:
-				htmlButton.innerHTML = `<p>portal on</p>`
-				htmlButton.className = "bt-on"
-				return false
-			case false:
-				htmlButton.innerHTML = `<p>portal off</p>`
-				htmlButton.className = "bt-off"
-				return true
+		case true:
+			htmlButton.innerHTML = "<p>portal on</p>"
+			htmlButton.className = "bt-on"
+			return false
+		case false:
+			htmlButton.innerHTML = "<p>portal off</p>"
+			htmlButton.className = "bt-off"
+			return true
 		}
 	})()
 }
@@ -376,16 +373,16 @@ function changeAimMode() {
 
 	isAimMode = (function() {
 		switch (isAimMode) {
-			case true:
-				moveDirection = "pause"
+		case true:
+			moveDirection = "pause"
 
-				htmlButton.innerHTML = `<p>aim mode on</p>`
-				htmlButton.className = "bt-on"
-				return false
-			case false:
-				htmlButton.innerHTML = `<p>aim</p> off`
-				htmlButton.className = "bt-off"
-				return true
+			htmlButton.innerHTML = "<p>aim mode on</p>"
+			htmlButton.className = "bt-on"
+			return false
+		case false:
+			htmlButton.innerHTML = "<p>aim</p> off"
+			htmlButton.className = "bt-off"
+			return true
 		}
 	})()
 }
@@ -395,14 +392,14 @@ function changeSnakeInSelfMode() {
 
 	isSnakeInSelfMode = (function() {
 		switch (isSnakeInSelfMode) {
-			case true:
-				htmlButton.innerHTML = `<p>snake in self on</p>`
-				htmlButton.className = "bt-on"
-				return false
-			case false:
-				htmlButton.innerHTML = `<p>snake in self off</p>`
-				htmlButton.className = "bt-off"
-				return true
+		case true:
+			htmlButton.innerHTML = "<p>snake in self on</p>"
+			htmlButton.className = "bt-on"
+			return false
+		case false:
+			htmlButton.innerHTML = "<p>snake in self off</p>"
+			htmlButton.className = "bt-off"
+			return true
 		}
 	})()
 }
@@ -412,18 +409,18 @@ function changeMovingBackwardMode() {
 
 	isMovingBackwardMode = (function() {
 		switch (isMovingBackwardMode) {
-			case true:
-				lastDirection = moveDirection
+		case true:
+			lastDirection = moveDirection
 
-				htmlButton.innerHTML = `<p>moving backward on</p>`
-				htmlButton.className = "bt-on"
-				return false
-			case false:
-				lastDirection = NaN
+			htmlButton.innerHTML = "<p>moving backward on</p>"
+			htmlButton.className = "bt-on"
+			return false
+		case false:
+			lastDirection = NaN
 
-				htmlButton.innerHTML = `<p>moving backward off</p>`
-				htmlButton.className = "bt-off"
-				return true
+			htmlButton.innerHTML = "<p>moving backward off</p>"
+			htmlButton.className = "bt-off"
+			return true
 		}
 	})()
 }
