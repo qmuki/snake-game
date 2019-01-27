@@ -86,11 +86,11 @@ function render() {
 	snakeHead = snake[0]
 
 	/* Physics collisions with walls, snake in self, fruit */
-	colission()
+	collision()
 
 	/* generate fruit */
 	// FIXME: fruit can generate in snake
-	generateFruit()
+	if (isFruitTaken === false) generateFruit()
 
 	/* drawing fruit */
 	drawingFruit()
@@ -138,13 +138,31 @@ function generateSnake() {
 }
 
 function generateFruit() {
-	if (isFruitTaken === false) {
+	console.log("generate fruit")
+
+	// toggle boolean
+	isFruitTaken = true
+
+	// generate new color
+	color_fruit = generateColor(150, 210, 210)
+
+	// generate fruit position while it's in the snake
+	generate()
+	while (collisionWithSnake() === true) {
+		console.log("regenerate")
+		generate()
+	}
+
+	function generate() {
 		fruit = [
 			Math.floor((Math.random() * gameWindowWidth) / cellSize) * cellSize,
 			Math.floor((Math.random() * gameWindowHeight) / cellSize) * cellSize
 		]
-		isFruitTaken = true
-		color_fruit = generateColor(150, 210, 210) // change fruit color
+	}
+	function collisionWithSnake() {
+		for (let i = 0; i < snake.length; i++)
+			if (fruit[0] === snake[i][0] && fruit[1] === snake[i][1])
+				return true
 	}
 }
 
@@ -306,7 +324,7 @@ function gameRestart() {
 }
 
 /* Colission */
-function colission() {
+function collision() {
 	// fruit
 	if (snakeHead[0] === fruit[0] && snakeHead[1] === fruit[1]) {
 		isFruitTaken = false
@@ -315,6 +333,7 @@ function colission() {
 
 	// snake in self
 	if (isSnakeInSelfMode === false) {
+		// i = 1. For skip the head-to-head check
 		for (let i = 1; i < snake.length; i++) {
 			if (snakeHead[0] === snake[i][0] && snakeHead[1] === snake[i][1]) {
 				color_snake = color_snakeDead
