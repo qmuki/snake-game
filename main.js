@@ -21,10 +21,23 @@ let isAimMode = true // snake aim
 let isSnakeInSelfMode = true // snake eat self
 let isMovingBackwardMode = true // snake moving backward
 
-// game's logic
-let isGameOver = false
+/* Game's logic */
 let isFruitTaken = false
 let isIncrease = false
+
+// game over
+let isGameOver = false
+let gameEndMessage = {
+	// Lose
+	crashWithSelf: false,
+	crashWithWalls: false,
+	// Win
+	maxScore: false
+}
+
+// stats
+let score = 1 // 1 = head
+let scoreDone = 0 // max possible score
 
 // colors
 let color_aimTrue = "rgba(0, 0, 255, 0.1)"
@@ -59,6 +72,10 @@ function startGame() {
 	ctx.canvas.width = gameWindowWidth
 	ctx.canvas.height = gameWindowHeight
 
+	// Add max possible score in stats panel
+	scoreDone = (gameWindowWidth / cellSize) * (gameWindowHeight / cellSize)
+	document.getElementById("score-done").innerHTML = scoreDone
+
 	gameLoop()
 }
 
@@ -68,10 +85,15 @@ async function gameLoop() {
 	function sleep(ms) {
 		return new Promise(resolve => setTimeout(resolve, ms))
 	}
-	while (isGameOver === false) {
+
+	while (!isGameOver) {
 		await sleep(timeSpeed)
 		render()
 	}
+
+	if (gameEndMessage.crashWithSelf) console.log("You lose!")
+	else if (gameEndMessage.crashWithWalls) console.log("You lose!")
+	else if (gameEndMessage.maxScore) console.log("You won!")
 }
 
 function render() {
@@ -138,8 +160,6 @@ function generateSnake() {
 }
 
 function generateFruit() {
-	console.log("generate fruit")
-
 	// toggle boolean
 	isFruitTaken = true
 
@@ -149,7 +169,6 @@ function generateFruit() {
 	// generate fruit position while it's in the snake
 	generate()
 	while (collisionWithSnake() === true) {
-		console.log("regenerate")
 		generate()
 	}
 
@@ -212,9 +231,20 @@ function move() {
 			snake[i] = temp_snake[i - 1]
 		}
 
-		// increase snake if is it needed
+		// increase snake if fruit taken
 		if (isIncrease) {
+			// Increase snake
 			snake.push(temp_snake[length])
+
+			// Update and increase score
+			score += 1
+			document.getElementById("score").innerHTML = score
+			if (score >= scoreDone) {
+				isGameOver = true
+				gameEndMessage.maxScore = true
+			}
+
+			// Reset boolean
 			isIncrease = false
 		}
 
@@ -310,17 +340,30 @@ function virtualKeyDown(key) {
 }
 
 function gameRestart() {
+	// Clear bool game over
+	isGameOver = false
+	for (let i = 0; i < gameEndMessage.length; i++) gameEndMessage[i] = false
+
+	// Generate new position
 	snake = generateSnake()
-	moveDirection = "pause"
+	snakeHead = snake[0]
+
 	isFruitTaken = false
 
+	// Generate new colors
 	color_snake = generateColor(255, 190, 220)
 	color_snakeHead = generateColor(210, 180, 180)
-	color_fruit = generateColor(150, 210, 210) // FIXME: it's working without this, but buggy
+	color_fruit = generateColor(150, 210, 210)
 
+	// Clear stats
+	score = 1
+	document.getElementById("score").innerHTML = 1
+
+	// Clear bool directions
+	moveDirection = "pause"
 	lastDirection = NaN
 
-	snakeHead = snake[0]
+	startGame()
 }
 
 /* Colission */
@@ -336,11 +379,9 @@ function collision() {
 		// i = 1. For skip the head-to-head check
 		for (let i = 1; i < snake.length; i++) {
 			if (snakeHead[0] === snake[i][0] && snakeHead[1] === snake[i][1]) {
-				color_snake = color_snakeDead
-				color_snakeHead = color_snakeDead
-				console.log("eaten by itself")
-				gameRestart()
-				// isGameOver = true
+				// Game over
+				isGameOver = true
+				gameEndMessage.crashWithSelf = true
 			}
 		}
 	}
@@ -360,11 +401,9 @@ function collision() {
 			snakeHead[0] >= gameWindowWidth ||
 			snakeHead[1] >= gameWindowHeight
 		) {
-			color_snake = color_snakeDead
-			color_snakeHead = color_snakeDead
-			console.log("crash with walls")
-			gameRestart()
-			// isGameOver = true
+			// Game over
+			isGameOver = true
+			gameEndMessage.crashWithWalls = true
 		}
 	}
 }

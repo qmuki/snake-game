@@ -3,7 +3,7 @@
 }
 
 /* modes */
-.modes p {
+p {
 	display: inline;
 
 	font-size: 14px;
@@ -11,7 +11,7 @@
 	font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.modes button {
+button {
 	border: 0;
 	border-radius: 5px;
 
@@ -19,6 +19,26 @@
 
 	margin: auto 0.2em;
 	margin-bottom: 8px;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+/* stats */
+.stats p {
+	padding: 6px;
+
+	background: rgba(69, 124, 196, 0.062);
+}
+
+#score {
+	color: green;
+}
+
+#score-done {
+	color: purple;
+	font-size: 0.8em;
 }
 
 /* js buttons */
