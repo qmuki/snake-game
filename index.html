@@ -5,10 +5,7 @@
 		<link rel="stylesheet" type="text/css" href="style.css" />
 	</head>
 
-	<body
-		onload="startGame(); changePortalMode(); changeAimMode(); changeSnakeInSelfMode(); changeMovingBackwardMode()"
-		onkeydown="keyDown()"
-	>
+	<body onload="start();" onkeydown="keyDown()">
 		<!-- turn off all modes -->
 
 		<!-- settings -->
@@ -20,16 +17,27 @@
 
 		<!-- modes -->
 		<div>
-			<button id="portal-mode" onclick="changePortalMode()"></button>
-			<button id="aim-mode" onclick="changeAimMode()"></button>
+			<button id="mode-portal" onclick="toggleMode(Modes.portal)">
+				<p>portal <span></span></p>
+			</button>
+			<button id="mode-aim" onclick="toggleMode(Modes.aim)">
+				<p>aim <span></span></p>
+			</button>
 			<button
-				id="snake-in-self-mode"
-				onclick="changeSnakeInSelfMode()"
-			></button>
+				id="mode-snake-in-self"
+				onclick="toggleMode(Modes.snakeInSelf)"
+			>
+				<p>snake in self <span></span></p>
+			</button>
 			<button
-				id="moving-backward-mode"
-				onclick="changeMovingBackwardMode()"
-			></button>
+				id="mode-moving-backward"
+				onclick="toggleMode(Modes.movingBackward)"
+			>
+				<p>moving backward <span></span></p>
+			</button>
+			<button id="mode-new-colors" onclick="toggleMode(Modes.newColors)">
+				<p>new colors <span></span></p>
+			</button>
 		</div>
 
 		<!-- game -->
@@ -38,8 +46,7 @@
 		<!-- stats -->
 		<div class="stats">
 			<p>
-				Score: <span id="score">1</span> 
-				<span id="score-done">0</span>
+				Score: <span id="score">1</span> <span id="score-done">0</span>
 			</p>
 		</div>
 

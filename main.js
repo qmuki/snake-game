@@ -16,10 +16,29 @@ const canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d")
 
 // modes
-let isPortalMode = true // walls portal
-let isAimMode = true // snake aim
-let isSnakeInSelfMode = true // snake eat self
-let isMovingBackwardMode = true // snake moving backward
+const Modes = {
+	aim: {
+		button: document.getElementById("mode-aim"),
+		value: true
+	},
+	snakeInSelf: {
+		button: document.getElementById("mode-snake-in-self"),
+		value: true
+	},
+	movingBackward: {
+		button: document.getElementById("mode-moving-backward"),
+		value: true
+	},
+	// create new colors when fruit is taken
+	newColors: {
+		button: document.getElementById("mode-new-colors"),
+		value: false
+	},
+	portal: {
+		button: document.getElementById("mode-portal"),
+		value: true
+	}
+}
 
 /* Game's logic */
 let isFruitTaken = false
@@ -75,9 +94,9 @@ let fruit = []
 let snakeHead = []
 
 /* update in move */
-let lastDirection
+let lastDirection = NaN
 
-function startGame() {
+function start() {
 	/* setup resolution of the canvas in html */
 	ctx.canvas.width = gameWindowWidth
 	ctx.canvas.height = gameWindowHeight
@@ -86,6 +105,17 @@ function startGame() {
 	scoreDone = (gameWindowWidth / cellSize) * (gameWindowHeight / cellSize)
 	document.getElementById("score-done").innerHTML = scoreDone
 
+	// Generate DOM for modes buttons
+	toggleMode(Modes.aim)
+	toggleMode(Modes.snakeInSelf)
+	toggleMode(Modes.movingBackward)
+	toggleMode(Modes.newColors)
+	toggleMode(Modes.portal)
+
+	startGame()
+}
+
+function startGame() {
 	gameLoop()
 }
 
@@ -121,7 +151,6 @@ function render() {
 	collision()
 
 	/* generate fruit */
-	// FIXME: fruit can generate in snake
 	if (isFruitTaken === false) generateFruit()
 
 	/* drawing fruit */
@@ -131,7 +160,7 @@ function render() {
 	drawingSnake()
 
 	/* aim mode */
-	if (isAimMode === true) aimMode()
+	if (Modes.aim.value === true) aimMode()
 }
 
 /* Drawing */
@@ -174,7 +203,8 @@ function generateFruit() {
 	isFruitTaken = true
 
 	// generate new colors
-	regenerateColors()
+	if (Modes.newColors.value) regenerateColors()
+	else color_fruit = randomColor(75)
 
 	// generate fruit position while it's in the snake
 	generate()
@@ -259,7 +289,7 @@ function move() {
 		}
 
 		// update lastDirection
-		if (!isMovingBackwardMode) lastDirection = moveDirection
+		if (!Modes.movingBackward.value) lastDirection = moveDirection
 	}
 
 	/* move snakeHead */
@@ -388,7 +418,7 @@ function collision() {
 	}
 
 	// snake in self
-	if (isSnakeInSelfMode === false) {
+	if (Modes.snakeInSelf.value === false) {
 		// i = 1. For skip the head-to-head check
 		for (let i = 1; i < snake.length; i++) {
 			if (snakeHead[0] === snake[i][0] && snakeHead[1] === snake[i][1]) {
@@ -400,7 +430,7 @@ function collision() {
 	}
 
 	// walls
-	if (isPortalMode === true) {
+	if (Modes.portal.value === true) {
 		// portal mode - on
 		if (snakeHead[0] < 0) snake[0][0] = gameWindowWidth - cellSize
 		else if (snakeHead[1] < 0) snake[0][1] = gameWindowHeight - cellSize
@@ -422,78 +452,30 @@ function collision() {
 }
 
 /* modes switches */
-function changePortalMode() {
-	const htmlButton = document.getElementById("portal-mode")
+function toggleMode(mode) {
+	// button: domElement, boolean: Modes = { button: domElement, value: boolean}
+	console.log(Modes.movingBackward)
+	// get span in button
+	const span = mode.button.getElementsByTagName("span")[0]
 
-	isPortalMode = (function() {
-		switch (isPortalMode) {
-		case true:
-			htmlButton.innerHTML = "<p>portal on</p>"
-			htmlButton.className = "bt-on"
-			return false
-		case false:
-			htmlButton.innerHTML = "<p>portal off</p>"
-			htmlButton.className = "bt-off"
-			return true
-		}
-	})()
-}
+	// toggle boolean
+	mode.value = !mode.value
 
-function changeAimMode() {
-	const htmlButton = document.getElementById("aim-mode")
+	// change button class and text
+	if (mode.value == true) {
+		mode.button.className = "bt-on"
+		span.innerHTML = "on"
 
-	isAimMode = (function() {
-		switch (isAimMode) {
-		case true:
-			moveDirection = "pause"
+		// specials modes
+		if (mode == Modes.movingBackward) lastDirection = NaN
+	} else {
+		mode.button.className = "bt-off"
+		span.innerHTML = "off"
 
-			htmlButton.innerHTML = "<p>aim mode on</p>"
-			htmlButton.className = "bt-on"
-			return false
-		case false:
-			htmlButton.innerHTML = "<p>aim</p> off"
-			htmlButton.className = "bt-off"
-			return true
-		}
-	})()
-}
-
-function changeSnakeInSelfMode() {
-	const htmlButton = document.getElementById("snake-in-self-mode")
-
-	isSnakeInSelfMode = (function() {
-		switch (isSnakeInSelfMode) {
-		case true:
-			htmlButton.innerHTML = "<p>snake in self on</p>"
-			htmlButton.className = "bt-on"
-			return false
-		case false:
-			htmlButton.innerHTML = "<p>snake in self off</p>"
-			htmlButton.className = "bt-off"
-			return true
-		}
-	})()
-}
-
-function changeMovingBackwardMode() {
-	const htmlButton = document.getElementById("moving-backward-mode")
-
-	isMovingBackwardMode = (function() {
-		switch (isMovingBackwardMode) {
-		case true:
-			lastDirection = moveDirection
-
-			htmlButton.innerHTML = "<p>moving backward on</p>"
-			htmlButton.className = "bt-on"
-			return false
-		case false:
-			lastDirection = NaN
-
-			htmlButton.innerHTML = "<p>moving backward off</p>"
-			htmlButton.className = "bt-off"
-			return true
-		}
-	})()
+		// specials modes
+		if (mode == Modes.aim) moveDirection = "pause"
+		else if (mode == Modes.movingBackward) lastDirection = moveDirection
+	}
 }
 
 /* modes */
