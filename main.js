@@ -43,15 +43,25 @@ let scoreDone = 0 // max possible score
 let color_aimTrue = "rgba(0, 0, 255, 0.1)"
 let color_aimFalse = "rgba(255, 255, 0, 0.8)"
 let color_canvasBody = "#f0f0f0"
-let color_snake = generateColor(255, 190, 220)
-let color_snakeHead = generateColor(210, 180, 180)
+let color_snake = NaN
+let color_snakeHead = NaN
 let color_snakeDead = "red"
-let color_fruit = generateColor(150, 210, 210)
+let color_fruit = NaN
+regenerateColors()
 
-function generateColor(r = 255, g = 255, b = 255) {
-	return `rgb(${Math.floor(Math.random() * r)},${Math.floor(
-		Math.random() * g
-	)},${Math.floor(Math.random() * b)})`
+function random(from, to) {
+	return Math.floor(from + Math.random() * to)
+}
+
+function randomColor(dirty) {
+	// dirty: number (1 - 101)
+	return `hsl(${random(0, 361)}, ${dirty}%, 50%)`
+}
+
+function regenerateColors() {
+	color_snake = randomColor(50)
+	color_snakeHead = randomColor(25)
+	color_fruit = randomColor(75)
 }
 
 /* snake direction */
@@ -163,8 +173,8 @@ function generateFruit() {
 	// toggle boolean
 	isFruitTaken = true
 
-	// generate new color
-	color_fruit = generateColor(150, 210, 210)
+	// generate new colors
+	regenerateColors()
 
 	// generate fruit position while it's in the snake
 	generate()
@@ -355,9 +365,7 @@ function gameRestart() {
 	isFruitTaken = false
 
 	// Generate new colors
-	color_snake = generateColor(255, 190, 220)
-	color_snakeHead = generateColor(210, 180, 180)
-	color_fruit = generateColor(150, 210, 210)
+	regenerateColors()
 
 	// Clear stats
 	score = 1
