@@ -340,6 +340,10 @@ function virtualKeyDown(key) {
 }
 
 function gameRestart() {
+	// Start new game when it's lose
+	let temp_isGameOver = false
+	if (isGameOver) temp_isGameOver = true
+
 	// Clear bool game over
 	isGameOver = false
 	for (let i = 0; i < gameEndMessage.length; i++) gameEndMessage[i] = false
@@ -363,7 +367,8 @@ function gameRestart() {
 	moveDirection = "pause"
 	lastDirection = NaN
 
-	startGame()
+	// Start new game when it's lose
+	if (temp_isGameOver) startGame()
 }
 
 /* Colission */
